@@ -1,0 +1,164 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const inflables = await getCollection("inflables");
+  return inflables.map((item) => ({
+    params: { slug: item.slug },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props;
+const { Content } = await item.render();
+
+const materialShort = item.data.material?.split(".")[0] ?? null;
+---
+
+<Layout
+  title={`${item.data.title} | Venta de Inflables`}
+  description={item.data.description}
+>
+  <main class="relative max-w-7xl mx-auto px-6 pt-24 pb-20 font-sans text-[#221934] overflow-hidden pl-17">
+
+    <!-- Burbujas decorativas -->
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 z-0">
+      <span class="bubble absolute rounded-full w-[90px] h-[90px] top-[4%] left-[4%] b1"></span>
+      <span class="bubble absolute rounded-full w-[50px] h-[50px] top-[18%] left-[80%] b2"></span>
+      <span class="bubble absolute rounded-full w-[30px] h-[30px] top-[60%] left-[6%] b3"></span>
+      <span class="bubble absolute rounded-full w-[70px] h-[70px] top-[75%] left-[88%] b4"></span>
+      <span class="bubble absolute rounded-full w-[22px] h-[22px] top-[40%] left-[92%] b5"></span>
+      <span class="bubble absolute rounded-full w-[40px] h-[40px] top-[88%] left-[30%] b6"></span>
+    </div>
+
+    <!-- Hero -->
+    <section class="relative z-10 grid grid-cols-[1.1fr_0.9fr] items-center gap-12 mb-16 max-md:grid-cols-1 max-md:text-center max-md:gap-8">
+      <div class="hero-text">
+        <p class="inline-block text-[0.8rem] font-bold tracking-[0.08em] uppercase text-[#ff5da2] mb-3">
+          Inflable premium · Renta para eventos
+        </p>
+        <h1 class="font-[Baloo_2,Inter,sans-serif] font-extrabold text-[clamp(2.2rem,4.5vw,3.4rem)] leading-[1.05] mt-0 mb-4 text-[#221934]">
+          {item.data.title}
+        </h1>
+        <p class="text-[1.05rem] leading-relaxed text-[#4a3d63] mb-7 max-w-[32ch] max-md:max-w-none max-md:mx-auto">
+          {item.data.description}
+        </p>
+
+        <div class="flex flex-wrap gap-2 mb-8 max-md:justify-center">
+          {item.data.dimensiones && (
+            <span class="inline-flex items-center gap-1 px-4 py-2 rounded-full text-[0.85rem] font-semibold border-[1.5px] border-dashed border-[#0e8aab] text-[#0e8aab] bg-[rgba(61,201,232,0.14)] whitespace-nowrap">
+              <span class="text-[0.95rem]">📐</span>
+              {item.data.dimensiones}
+            </span>
+          )}
+          {item.data.capacidad && (
+            <span class="inline-flex items-center gap-1 px-4 py-2 rounded-full text-[0.85rem] font-semibold border-[1.5px] border-dashed border-[#a8740a] text-[#a8740a] bg-[rgba(255,200,61,0.16)] whitespace-nowrap">
+              <span class="text-[0.95rem]">🎈</span>
+              {item.data.capacidad}
+            </span>
+          )}
+          {materialShort && (
+            <span class="inline-flex items-center gap-1 px-4 py-2 rounded-full text-[0.85rem] font-semibold border-[1.5px] border-dashed border-[#c23a7c] text-[#c23a7c] bg-[rgba(255,93,162,0.12)] whitespace-nowrap">
+              <span class="text-[0.95rem]">🧵</span>
+              {materialShort}
+            </span>
+          )}
+        </div>
+
+       <a href="https://wa.me/525539385685" target="_blank" class="cta-button max-md:hidden">
+          Contactar para comprar
+        </a>
+      </div>
+
+      {item.data.imageBanner && (
+        <div class="flex justify-center max-md:-order-1">
+          <div class="hero-orb relative rounded-full overflow-hidden bg-white" style="width: clamp(500px,36vw,560px); height: clamp(500px,36vw,560px);">
+            <img src={item.data.imageBanner} alt={item.data.title} class="w-full h-full object-cover" />
+            <span class="orb-shine absolute inset-0 rounded-full pointer-events-none"></span>
+          </div>
+        </div>
+      )}
+    </section>
+
+    <!-- Detalle / contenido Markdown -->
+    <section class="relative z-10 bg-white rounded-[28px] px-[clamp(1.5rem,5vw,3.5rem)] py-10 shadow-[0_20px_45px_rgba(34,25,52,0.08)] border border-[rgba(34,25,52,0.06)]">
+      <div class="prose-inflable">
+        <Content />
+      </div>
+    </section>
+
+    <!-- CTA móvil -->
+    <section class="hidden max-md:block text-center mt-10">
+      <a href="https://wa.me/525539385685" target="_blank" class="cta-button">
+        Contactar para comprar
+      </a>
+    </section>
+
+  </main>
+</Layout>
+
+<style>
+
+  /* ── Burbujas ── */
+  .bubble {
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.85), rgba(255,255,255,.05) 60%);
+    border: 1px solid rgba(255,255,255,.5);
+    filter: blur(.5px);
+    animation: drift 16s ease-in-out infinite;
+  }
+  .b1 { background-color: rgba(255,93,162,.12);  animation-duration:14s; }
+  .b2 { background-color: rgba(61,201,232,.14);  animation-duration:18s; animation-delay:-3s; }
+  .b3 { background-color: rgba(255,200,61,.16);  animation-duration:12s; animation-delay:-6s; }
+  .b4 { background-color: rgba(255,93,162,.10);  animation-duration:20s; animation-delay:-2s; }
+  .b5 { background-color: rgba(61,201,232,.18);  animation-duration:11s; animation-delay:-4s; }
+  .b6 { background-color: rgba(255,200,61,.14);  animation-duration:15s; animation-delay:-7s; }
+
+  @keyframes drift {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    50%       { transform: translate(12px,-18px) scale(1.05); }
+  }
+
+  /* ── Orbe imagen ── */
+  .hero-orb {
+    box-shadow:
+      0 0 0 6px rgba(255,255,255,.7),
+      0 0 0 9px rgba(61,201,232,.25),
+      0 25px 50px rgba(34,25,52,.25);
+  }
+  .orb-shine {
+    background: radial-gradient(circle at 28% 22%, rgba(255,255,255,.65), rgba(255,255,255,0) 45%);
+  }
+
+  /* ── Botón CTA ── */
+  .cta-button {
+    display: inline-block;
+    padding: 1rem 2.2rem;
+    border-radius: 999px;
+    background: #ff5da2;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    box-shadow: 0 8px 0 0 #d6357f, 0 14px 24px rgba(255,93,162,.35);
+    transition: transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s ease;
+  }
+  .cta-button:hover  { transform: translateY(-4px); box-shadow: 0 12px 0 0 #d6357f, 0 18px 28px rgba(255,93,162,.4); }
+  .cta-button:active { transform: translateY(2px);  box-shadow: 0 4px 0 0 #d6357f,  0 8px 16px rgba(255,93,162,.35); }
+  .cta-button:focus-visible { outline: 3px solid #3dc9e8; outline-offset: 3px; }
+
+  /* ── Prose del contenido Markdown ── */
+  .prose-inflable :global(h1) { display: none; }
+  .prose-inflable :global(h3) { font-family: "Baloo 2", sans-serif; font-weight: 700; font-size: 1.3rem; color: #221934; margin: 0 0 1rem; }
+  .prose-inflable :global(p)  { line-height: 1.75; color: #4a3d63; margin: 0 0 1.25rem; }
+  .prose-inflable :global(ul) { list-style: none; padding: 0; margin: 0 0 1.5rem; display: grid; gap: .85rem; }
+  .prose-inflable :global(li) { position: relative; padding-left: 1.8rem; line-height: 1.6; color: #4a3d63; }
+  .prose-inflable :global(li)::before { content: "●"; position: absolute; left: 0; top: .05em; color: #3dc9e8; font-size: .7em; }
+  .prose-inflable :global(strong) { color: #221934; font-weight: 700; }
+
+  /* ── Movimiento reducido ── */
+  @media (prefers-reduced-motion: reduce) {
+    .bubble       { animation: none; }
+    .cta-button   { transition: none; }
+  }
+</style>
