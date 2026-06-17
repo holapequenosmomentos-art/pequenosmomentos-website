@@ -1,3 +1,5 @@
+export const prerender = false;
+
 import type { APIRoute } from "astro";
 import Stripe from "stripe";
 
@@ -20,7 +22,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
                 name: "Asesoría Personalizada",
                 description: "Sesión privada 1 a 1 de 40 minutos",
               },
-              unit_amount: 99900, // $999.00 MXN en centavos
+              unit_amount: 99900, 
             },
             quantity: 1,
           },
