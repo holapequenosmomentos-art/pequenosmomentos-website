@@ -10,11 +10,12 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/netlify": "^7.0.13",
     "@astrojs/node": "^9.5.1",
     "@fontsource/manjari": "^5.2.5",
     "@fontsource/patrick-hand": "^5.2.5",
     "@tailwindcss/vite": "^4.1.8",
-    "astro": "^5.8.2",
+    "astro": "^6.4.8",
     "resend": "^6.7.0",
     "stripe": "^20.1.1",
     "tailwindcss": "^4.1.8"
