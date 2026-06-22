@@ -1,5 +1,5 @@
 ---
-import { getCollection, getEntryBySlug } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import * as Icons from "../../components/Icons";
 import Layout from "../../layouts/Layout.astro";
 import { render } from "astro:content";
@@ -7,7 +7,7 @@ import { render } from "astro:content";
 export async function getStaticPaths() {
   const paquetes = await getCollection("paquetes");
   return paquetes.map((paquete) => ({
-    params: { id: paquete.slug },
+    params: { id: paquete.id },
     props: { paquete },
   }));
 }
@@ -17,8 +17,7 @@ let { paquete } = Astro.props as { paquete?: any };
 if (!paquete) {
   const { id } = Astro.params;
   if (id) {
-    const getBySlug = getEntryBySlug as any;
-    paquete = await getBySlug("paquetes", id);
+    paquete = await getEntry("paquetes", id);
   }
 }
 

@@ -1,18 +1,29 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
   const eventosEntries = await getCollection('eventos');
   
   return eventosEntries.map(evento => ({
-    params: { id: evento.slug },
+    params: { id: evento.id },
     props: { evento },
   }));
 }
 
-const { evento } = Astro.props;
-const { Content } = await evento.render();
+const eventoProp = Astro.props.evento;
+const idParam = Astro.params.id;
+
+const evento = eventoProp ?? (idParam ? await getEntry("eventos", idParam) : undefined);
+
+if (!evento) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not found'
+  });
+}
+
+const { Content } = await render(evento);
 ---
 
 <Layout title={evento.data.nombre}>

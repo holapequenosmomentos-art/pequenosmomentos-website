@@ -1,17 +1,28 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getCollection } from "astro:content";
+import { getCollection, getEntry, render } from "astro:content";
 
 export async function getStaticPaths() {
   const inflables = await getCollection("inflables");
   return inflables.map((item) => ({
-    params: { slug: item.slug },
+    params: { slug: item.id },
     props: { item },
   }));
 }
 
-const { item } = Astro.props;
-const { Content } = await item.render();
+const itemProp = Astro.props.item;
+const slugParam = Astro.params.slug;
+
+const item = itemProp ?? (slugParam ? await getEntry("inflables", slugParam) : undefined);
+
+if (!item) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not found'
+  });
+}
+
+const { Content } = await render(item);
 
 const materialShort = item.data.material?.split(".")[0] ?? null;
 ---

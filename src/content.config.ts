@@ -1,7 +1,7 @@
 import { defineCollection, z } from "astro:content";
-
+import { glob } from 'astro/loaders';
 const servicios = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: "**/*.md", base: "./src/content/servicios" }),
   schema: z.object({
     title: z.string(),
     shortTitle: z.string().optional(),
@@ -23,7 +23,7 @@ const servicios = defineCollection({
 });
 
 const paquetes = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: "**/*.md", base: "./src/content/paquetes" }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
@@ -38,7 +38,7 @@ const paquetes = defineCollection({
 });
 
 const eventos = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: "**/*.md", base: "./src/content/eventos" }),
   schema: z.object({
     id: z.number(),
     nombre: z.string(),
@@ -55,7 +55,7 @@ const eventos = defineCollection({
 });
 
 const actividades = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: "**/*.md", base: "./src/content/actividades" }),
   schema: z.object({
     title: z.string(),
     shortTitle: z.string().optional(),
@@ -76,7 +76,7 @@ const actividades = defineCollection({
 });
 
 const inflables = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: "**/*.md", base: "./src/content/inflables" }),
   schema: z.object({
     title: z.string(),
     description: z.string(),

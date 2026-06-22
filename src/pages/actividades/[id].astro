@@ -1,5 +1,5 @@
 ---
-import { getCollection, getEntryBySlug } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import * as Icons from "../../components/Icons";
 import Layout from "../../layouts/Layout.astro";
 import { render } from "astro:content";
@@ -7,7 +7,7 @@ import { render } from "astro:content";
 export async function getStaticPaths() {
   const actividades = await getCollection("actividades");
   return actividades.map((actividad) => ({
-    params: { id: actividad.slug },
+    params: { id: actividad.id },
     props: { actividad },
   }));
 }
@@ -17,8 +17,7 @@ let { actividad } = Astro.props as { actividad?: any };
 if (!actividad) {
   const { id } = Astro.params;
   if (id) {
-    const getBySlug = getEntryBySlug as any;
-    actividad = await getBySlug("actividades", id);
+    actividad = await getEntry("actividades", id);
   }
 }
 
